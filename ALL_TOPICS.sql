@@ -130,13 +130,17 @@ SELECT ID  FROM TableA UNION SELECT ID  FROM TableB;
  ### UNION ALL : keeps all records, including duplicates.
 SELECT ID  FROM TableA UNION ALL SELECT ID  FROM TableB; 
  
- ################### 16. GROUP BY
- 
- 
- 
- 
- 
- 
+#################### 16. GROUP BY : aggregate functions (COUNT(), MAX(), MIN(), SUM(), AVG())
+ select count(*) ,country from customers GROUP BY country;
+ select sum(creditLimit) ,country from customers GROUP BY country;
+ select AVG(creditLimit) ,country from customers GROUP BY country;
+       ## ORDEY BY 2 Columns : https://stackoverflow.com/questions/2421388/using-group-by-on-multiple-columns 
+ select country , city , AVG(creditLimit) from customers GROUP BY country,city ORDER BY country;
+  
+#################### 17. HAVING : HAVING clause was added to SQL because the WHERE keyword cannot be used with aggregate functions.
+		## WRITTEN AFTER THE "GROUP BY" CLAUSE
+ select AVG(creditLimit) ,country from customers  GROUP BY country HAVING AVG(creditLimit) >80000;
+ select AVG(creditLimit) AS C1,country from customers  GROUP BY country HAVING C1 >80000;
  
  
  
