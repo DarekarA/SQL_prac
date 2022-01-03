@@ -137,15 +137,56 @@ SELECT ID  FROM TableA UNION ALL SELECT ID  FROM TableB;
        ## ORDEY BY 2 Columns : https://stackoverflow.com/questions/2421388/using-group-by-on-multiple-columns 
  select country , city , AVG(creditLimit) from customers GROUP BY country,city ORDER BY country;
   
-#################### 17. HAVING : HAVING clause was added to SQL because the WHERE keyword cannot be used with aggregate functions.
+#################### 17. HAVING : HAVING clause was added to SQL because the WHERE keyword cannot be used with aggregate functions (ex : GROUP BY).
 		## WRITTEN AFTER THE "GROUP BY" CLAUSE
  select AVG(creditLimit) ,country from customers  GROUP BY country HAVING AVG(creditLimit) >80000;
  select AVG(creditLimit) AS C1,country from customers  GROUP BY country HAVING C1 >80000;
  
+#################### 18. EXISTS :Used to TEST EXISTENCE of any record in a SUBQUERY.EXISTS returns TRUE if the subquery RETURNS 1 OR MORE RECORDS.
+ SELECT * from customers where EXISTS (select * from customers where country='UK'); # Subquery returns TRUE so we will get output of OUTER query.
  
+ SELECT * from customers where EXISTS (select * from customers where country='UKE'); # Subquery returns FALSE so we will get output of OUTER query.
  
+#################### 19. ANY, ALL
+
+
+#################### 20. 'INSERT INTO SELECT' : Copies data from one table into a new table.
+ create table IF NOT EXISTS new_table (ID INT , CITYYYY varchar(20));
  
+ insert into new_table select customerNumber , city from customers;  
+ select * from new_table;
  
- 
- 
- 
+#################### 21. CASE :
+	/* The CASE statement goes through conditions and returns a value when the first condition is met (like an if-then-else statement). So, once a condition is true, it will stop reading and return the result. If no conditions are true, it returns the value in the ELSE clause.
+       If there is no ELSE part and no conditions are true, it returns NULL.*/
+  
+  select * from customers;
+  select customerNumber , country,
+	CASE
+		WHEN country='USA' THEN "USA"
+        WHEN country="UK" THEN "UK"
+        ELSE "NOT USA" 
+        END AS ISUSA
+    from customers;    
+
+#################### 22. NULL FUNCTIONS :    IFNULL(), ISNULL(), COALESCE(), and NVL() 
+	/* 
+    - IFNULL() :lets you return an alternative value if an expression is NULL. ex :IFNULL(UnitsOnOrder, 0) i.e will return 0 if UnitsOnOrder is Null.
+    - ISNULL() : Returns 1 if expression is NULL, 0 if not NULL	*/
+	
+select customerNumber , contactLastName , creditLimit , state , ISNULL(State) AS STATE1 from customers ;
+select customerNumber , contactLastName , creditLimit , state , IFNULL(State , "STATE IS NULL") AS STATE1 from customers ;
+
+#################### 23. Stored Procedure :  Prepared SQL code that you can save, so the code can be reused over and over again.
+
+DELIMITER $$
+	CREATE PROCEDURE GetCustomers()
+	BEGIN
+		SELECT customerNumber , customerName , city from customers;
+    END$$
+Delimiter ;    
+
+CALL GetCustomers();
+
+#########################
+
